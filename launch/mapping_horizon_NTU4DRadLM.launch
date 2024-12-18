@@ -1,0 +1,17 @@
+<launch>
+
+	<arg name="rviz" default="true" />
+
+	<rosparam command="load" file="$(find fast_livo)/config/NTU4DRadLM.yaml" />
+
+	<node pkg="fast_livo" type="fastlivo_mapping" name="laserMapping" output="screen" >
+		<rosparam file="$(find fast_livo)/config/camera_NTU4DRadLM.yaml" />
+	</node>
+	
+	<group if="$(arg rviz)">
+		<node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find fast_livo)/rviz_cfg/ntu4drad_livox_thermal.rviz" />
+	</group>
+	<node pkg="image_transport" type="republish" name="republish" args="compressed in:=/thermal_cam/thermal_image/compressed raw out:=/thermal_cam/thermal_image" output="screen" respawn="true"/>
+
+launch-prefix="gdb -ex run --args"
+</launch> 	
